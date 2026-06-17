@@ -5,7 +5,7 @@
 
 //参考ls.c的设计
 void
-find(char *path){
+find(char *path,char *target){
   char buf[512], *p;
   int fd;
   struct dirent de;//包括ushort inum和char name[DIRSIZ]
@@ -33,21 +33,33 @@ find(char *path){
         break;
         }
     strcpy(buf, path);
-    p = buf + strlen(buf);
+    p = buf + strlen(buf);//p：指向当前目录项的文件名位置
     *p++ = '/';
 
     while(read(fd,&de,sizeof(de))==sizeof(de)){
       if(de.inum == 0)
       continue;
+      if(strcmp(de.name, ".") == 0 || strcmp(de.name, "..") == 0)
+      continue;    
       memmove(p, de.name, DIRSIZ);
-    p[DIRSIZ] = 0;
+      p[DIRSIZ] = 0;
+      //如果p和目标相等退出
+      if(strcmp(p,target) == 0)
+        printf("%s\n",buf);
+
+      find(buf,target);
     }
 }
     close(fd);
 }
 int
-main()
+main(int argc, char*argv[])
 {
-  find(".");
+  if(argc != 3){
+    fprintf(2,"usage: find path target\n");
+    exit(1);
+  }
+
+  find(argv[1],argv[2]);
   exit(0);
 }
