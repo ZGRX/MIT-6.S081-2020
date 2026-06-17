@@ -9,7 +9,7 @@ fmtname(char *path)
   static char buf[DIRSIZ+1];
   char *p;
 
-  // Find first character after last slash.
+  // Find first character after last slash
   for(p=path+strlen(path); p >= path && *p != '/'; p--)
     ;
   p++;
@@ -20,7 +20,7 @@ fmtname(char *path)
   memmove(buf, p, strlen(p));
   memset(buf+strlen(p), ' ', DIRSIZ-strlen(p));
   return buf;
-}
+} 
 
 void
 ls(char *path)
@@ -31,7 +31,7 @@ ls(char *path)
   struct stat st;
 
   if((fd = open(path, 0)) < 0){
-    fprintf(2, "ls: cannot open %s\n", path);
+    fprintf(2, "ls: cannot open %s\n", path);//0：标准输入，1：标准输出，2：标准错误
     return;
   }
 
@@ -42,11 +42,11 @@ ls(char *path)
   }
 
   switch(st.type){
-  case T_FILE:
+  case T_FILE://处理文件
     printf("%s %d %d %l\n", fmtname(path), st.type, st.ino, st.size);
     break;
 
-  case T_DIR:
+  case T_DIR://处理目录
     if(strlen(path) + 1 + DIRSIZ + 1 > sizeof buf){
       printf("ls: path too long\n");
       break;
