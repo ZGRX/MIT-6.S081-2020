@@ -9,7 +9,7 @@ find(char *path,char *target){
   char buf[512], *p;
   int fd;
   struct dirent de;//包括ushort inum和char name[DIRSIZ]
-  struct stat st;    
+  struct stat st;
 
   if((fd = open(path, 0)) < 0){
     fprintf(2, "ls: cannot open %s\n", path);//0：标准输入，1：标准输出，2：标准错误
